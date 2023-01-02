@@ -1,12 +1,51 @@
-<div>{{counter}}</div>
+<h2>Anmeldung DIAMOND Mitgliedschaft</h2>
 <form>
-    <div class="flex flex-col justify-center p-10">
-        <input class="input input-bordered input-secondary my-10" type="text" name="firstname" placeholder="Vorname">
-        <input class="input input-bordered input-secondary my-10" type="text" name="lastname" placeholder="Nachname">
-        <input class="input input-bordered input-secondary my-10" type="number" name="age" placeholder="Alter">
-        <input class="input input-bordered input-secondary my-10" type="email" name="email" placeholder="E-Mail">
-        <input class="input input-bordered input-secondary my-10" type="tel" name="telephone"
-            placeholder="Telefonnummer">
-        <input class="btn btn-secondary" type="submit" value="Jetzt Premium Mitglied werden!">
+    <div class="container">
+        <!-- TODO Anrede weggelassen aus "rechtlichen" Gründen (divers?)-->
+        <div id="form-1">
+            <label>
+                <input type="text" name="surname" required>
+                Nachname <its-req-star></its-req-star>
+            </label>
+            <label>
+                <input type="text" name="firstname" required>
+                Vorname <its-req-star></its-req-star>
+            </label>
+            <label>
+                <input type="email" name="email" required>
+                E-Mail <its-req-star></its-req-star>
+            </label>
+            <label>
+                <input type="tel" name="phone">
+                Telefon
+            </label>
+            <label>
+                <input type="text" name="street" required>
+                Straße <its-req-star></its-req-star>
+            </label>
+            <label>
+                <input type="text" name="city" required>
+                Stadt <its-req-star></its-req-star>
+            </label>
+        </div>
+        <div id="form-2">
+            <div class="webcam-preview">
+                <button>Foto aufnehmen</button>
+            </div>
+            <label>
+                <input type="number" name="housenumber" required>
+                Hausnummer <its-req-star></its-req-star>
+            </label>
+            <label>
+                <input type="number" name="postcode" required>
+                PLZ <its-req-star></its-req-star>
+            </label>
+        </div>
+    </div>
+    <div>
+        Mit <its-req-star></its-req-star> gekennzeichnete Felder müssen ausgefüllt sein
+    </div>
+    <div>
+        <input type="submit" value="Anmeldung verbindlich abschließen">
     </div>
 </form>

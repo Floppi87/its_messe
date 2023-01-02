@@ -2,9 +2,14 @@ div.banner {
     position: absolute;
     width: 200%;
     height: 15rem;
-    top: -13rem;
+    top: -19rem;
     left: -10rem;
+    z-index: -1;
 
-    background: #004E94;
+    background: var(--primary);
     transform: rotate(-5deg);
+}
+
+div.formular {
+    padding: 4rem 1rem;
 }

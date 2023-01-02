@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormularComponent } from './components/formular/formular.component';
 import { MainComponent } from './components/base/main/main.component';
+import { RequiredStarComponent } from './components/formular/required-star/required-star.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FormularComponent,
-    MainComponent
+    MainComponent,
+    RequiredStarComponent
   ],
   imports: [
     BrowserModule,
