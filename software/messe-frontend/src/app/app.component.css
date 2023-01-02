@@ -1,0 +1,10 @@
+div.banner {
+    position: absolute;
+    width: 200%;
+    height: 15rem;
+    top: -13rem;
+    left: -10rem;
+
+    background: #004E94;
+    transform: rotate(-5deg);
+}

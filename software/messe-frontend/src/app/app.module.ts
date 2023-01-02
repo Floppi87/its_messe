@@ -4,11 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormularComponent } from './components/formular/formular.component';
+import { MainComponent } from './components/base/main/main.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FormularComponent
+    FormularComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,

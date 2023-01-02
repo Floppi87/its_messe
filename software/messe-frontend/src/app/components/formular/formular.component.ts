@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FormularComponent implements OnInit {
 
+  counter: number = 0;
   constructor() { }
 
   ngOnInit(): void {
+    setInterval(()=>{
+      this.counter++;
+    }, 1000)
   }
-
 }
