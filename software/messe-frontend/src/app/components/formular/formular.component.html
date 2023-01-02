@@ -30,7 +30,7 @@
         </div>
         <div id="form-2">
             <div class="webcam-preview">
-                <button>Foto aufnehmen</button>
+                <its-webcam (image)="webcamImg = $event"></its-webcam>
             </div>
             <label>
                 <input type="number" name="housenumber" required>
@@ -49,3 +49,5 @@
         <input type="submit" value="Anmeldung verbindlich abschließen">
     </div>
 </form>
+
+<button (click)="sendExample()">Example</button>

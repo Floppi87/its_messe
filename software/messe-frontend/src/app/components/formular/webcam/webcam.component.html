@@ -1,0 +1,11 @@
+<div *ngIf="sysImage">
+    <img [src]="sysImage">
+    <button (click) = "deleteSnapshot()">Delete</button>
+</div>
+<div *ngIf="!sysImage">
+    <webcam
+      [trigger]="invokeObservable"
+      (imageCapture)="captureImg($event)"
+    ></webcam>
+</div>
+<button (click) = "getSnapshot()">Click</button>
