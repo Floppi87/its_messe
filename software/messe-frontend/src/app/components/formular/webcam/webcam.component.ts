@@ -13,6 +13,9 @@ export class WebcamComponent implements OnInit {
   private nextWebcam: Subject<any> = new Subject();
   sysImage = '';
 
+  width: number = 640;
+  height: number = 362;
+
   @Output("image") imgEmitter = new EventEmitter<string>();
 
   ngOnInit() {
@@ -31,7 +34,6 @@ export class WebcamComponent implements OnInit {
     this.webcamImage = webcamImage;
     this.sysImage = webcamImage!.imageAsDataUrl;
     this.imgEmitter.emit(this.sysImage)
-    console.info('got webcam image', this.sysImage);
   }
   public get invokeObservable(): Observable<any> {
     return this.trigger.asObservable();

@@ -1,4 +1,5 @@
 ﻿using Messe_Backend.Models;
+using MySql.Data.MySqlClient;
 using System.Buffers.Text;
 
 namespace Messe_Backend.MySQL
@@ -36,6 +37,25 @@ namespace Messe_Backend.MySQL
             parameter.Add("@picture", personData.Picture);
 
             mysql.ExecuteNonQuery(sql, parameter);
+        }
+
+        public List<Product> GetProducts()
+        {
+            Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+            string sql = "SELECT * FROM products";
+            List<Product> products = new List<Product>();
+            using (MySqlDataReader reader = mysql.GetReader(sql))
+            {
+                while(reader.Read())
+                {
+                    products.Add(new Product()
+                    {
+                        ID = reader.GetInt32(0),
+                        Name = reader.GetString(1)
+                    });
+                }
+            }
+            return products;
         }
 
         public static string Base64Encode(string plainText)

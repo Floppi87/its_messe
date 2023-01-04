@@ -18,8 +18,31 @@ namespace Messe_Backend.Controllers
         [HttpPost("data")]
         public IActionResult Register(PersonData data)
         {
-            db.RegisterCustomer(data);
-            return Ok(data);
+            try
+            {
+                db.RegisterCustomer(data);
+                return Ok(data);
+            }
+            catch(Exception ex) {
+                return BadRequest(ex.Message);
+            }
+            
+        }
+
+        [HttpGet("products")]
+        public IActionResult GetProducts()
+        {
+            try
+            {
+                List<Product> products = db.GetProducts();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+            
         }
     }
 }

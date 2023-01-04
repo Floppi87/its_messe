@@ -24,10 +24,6 @@ export interface AdressFragment {
     country: string;
 }
 
-export interface CompanyFragment {
-    name: string;
-    adress: AdressFragment
-}
 
 
 export enum RegisterPhase {
@@ -35,6 +31,7 @@ export enum RegisterPhase {
     PersonalAdress,
     Webcam,
     Company,
+    Interest,
     Finished
 }
 
@@ -42,4 +39,9 @@ export enum ControlAction {
     Next,
     Back,
     Abort
+}
+
+export interface Product {
+    id: number;
+    name: string;
 }

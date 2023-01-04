@@ -1,1 +1,7 @@
-<p>interest-form works!</p>
+<div class="container">
+    <label *ngFor="let product of products">
+        <input type="checkbox" value="{{product.id}}" name="{{product.id}}" (change)="onChange(product)">
+        {{product.name}}
+    </label>
+</div>
+<its-form-control *ngIf="selectedIDs.length > 0" (action) = "onControl($event)"></its-form-control>

@@ -14,4 +14,8 @@ export class RestService {
       console.log(resp)
     })
   }
+
+  getProducts() {
+    return this.http.get("http://localhost:5085/api/v1/products")
+  }
 }

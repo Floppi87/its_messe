@@ -1,19 +1,23 @@
-
-    <div class="adress">
-        <label>
-            <input type="text" name="street" formControlName="street" required>
-            Straße <its-req-star></its-req-star>
-        </label>
-        <label>
-            <input type="text" name="housenumber" formControlName="houseNr" required>
-            Hausnummer <its-req-star></its-req-star>
-        </label>
-        <label>
-            <input type="number" name="postcode" formControlName="plz" required>
-            PLZ <its-req-star></its-req-star>
-        </label>
-        <label>
-            <input type="text" name="city" formControlName="city" required>
-            Stadt <its-req-star></its-req-star>
-        </label>
-    </div>
+<form>
+    <label>
+        <input type="text" name="street" id="street">
+        Straße <its-req-star></its-req-star>
+    </label>
+    <label>
+        <input type="text" name="housenumber" id="houseNr">
+        Hausnummer <its-req-star></its-req-star>
+    </label>
+    <label>
+        <input type="number" name="postcode" id="plz">
+        PLZ <its-req-star></its-req-star>
+    </label>
+    <label>
+        <input type="text" name="city" id="city">
+        Stadt <its-req-star></its-req-star>
+    </label>
+    <label>
+        <input type="text" name="country" id="country">
+        Land <its-req-star></its-req-star>
+    </label>
+</form>
+<its-form-control (action) = "onControl($event)"></its-form-control>

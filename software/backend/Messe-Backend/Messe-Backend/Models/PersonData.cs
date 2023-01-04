@@ -10,6 +10,8 @@ namespace Messe_Backend.Models
         public string Phone { get; set; } = "";
         public Adress Adress { get; set; }
         public string Picture { get; set; }
+        public Company Company { get; set; } = null;
+        public List<Product> Interests { get; set; } = new List<Product>();
 
     }
 }
