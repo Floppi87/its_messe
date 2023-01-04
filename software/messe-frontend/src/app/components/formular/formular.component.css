@@ -4,34 +4,30 @@
 h2 {
     color: var(--primary);
     font: 3rem sans-serif;
+    text-align: center;
 }
 
-.container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 1rem;
-}
 
-#form-1 {
-    flex-grow: 2;
-}
-#form-2 {
-    flex-grow: 1;
-}
 
-label, input {
-    width: 100%;
-    display: block;
-    font-size: inherit;
-}
+
+
+
+.check {
+    line-height: 1.1;
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 0.5em;
+  }
 
 div > * {
     margin: 1rem 0;
 }
 
-input, button {
-    border: 0;
-    padding: 0.5rem 0.2rem;
-    background-color: lightgray;
+
+.error {
+    border-color: red;
+}
+
+.webcam-preview {
+    max-width: 30%;
 }

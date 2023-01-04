@@ -1,53 +1,8 @@
 <h2>Anmeldung DIAMOND Mitgliedschaft</h2>
-<form>
-    <div class="container">
-        <!-- TODO Anrede weggelassen aus "rechtlichen" Gründen (divers?)-->
-        <div id="form-1">
-            <label>
-                <input type="text" name="surname" required>
-                Nachname <its-req-star></its-req-star>
-            </label>
-            <label>
-                <input type="text" name="firstname" required>
-                Vorname <its-req-star></its-req-star>
-            </label>
-            <label>
-                <input type="email" name="email" required>
-                E-Mail <its-req-star></its-req-star>
-            </label>
-            <label>
-                <input type="tel" name="phone">
-                Telefon
-            </label>
-            <label>
-                <input type="text" name="street" required>
-                Straße <its-req-star></its-req-star>
-            </label>
-            <label>
-                <input type="text" name="city" required>
-                Stadt <its-req-star></its-req-star>
-            </label>
-        </div>
-        <div id="form-2">
-            <div class="webcam-preview">
-                <its-webcam (image)="webcamImg = $event"></its-webcam>
-            </div>
-            <label>
-                <input type="number" name="housenumber" required>
-                Hausnummer <its-req-star></its-req-star>
-            </label>
-            <label>
-                <input type="number" name="postcode" required>
-                PLZ <its-req-star></its-req-star>
-            </label>
-        </div>
-    </div>
-    <div>
-        Mit <its-req-star></its-req-star> gekennzeichnete Felder müssen ausgefüllt sein
-    </div>
-    <div>
-        <input type="submit" value="Anmeldung verbindlich abschließen">
-    </div>
-</form>
+<div class="container">
+    <its-personal-form *ngIf="currentPhase == 0" (result) ="onResult(0, $event)"></its-personal-form>
+    <its-personal-adress-form *ngIf="currentPhase == 1"></its-personal-adress-form>
+    <its-webcam-form *ngIf="currentPhase == 2"></its-webcam-form>
+    <its-company-form *ngIf="currentPhase == 3"></its-company-form>
+</div>
 
-<button (click)="sendExample()">Example</button>

@@ -8,3 +8,25 @@ body {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.container {
+    padding: 0 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+label, input {
+    width: 100%;
+    display: block;
+    font-size: inherit;
+}
+
+input, button {
+    border: 0;
+    padding: 0.5rem 0.2rem;
+    background-color: lightgray;
+}
+input[type="submit"]:hover {
+    background-color: darkgray;
+    cursor: pointer;
+}

@@ -1,6 +1,6 @@
 <div *ngIf="sysImage">
     <img [src]="sysImage">
-    <button (click) = "deleteSnapshot()">Delete</button>
+    <button (click) = "deleteSnapshot($event)">Delete</button>
 </div>
 <div *ngIf="!sysImage">
     <webcam
@@ -8,4 +8,4 @@
       (imageCapture)="captureImg($event)"
     ></webcam>
 </div>
-<button (click) = "getSnapshot()">Click</button>
+<button (click) = "getSnapshot($event)">Click</button>

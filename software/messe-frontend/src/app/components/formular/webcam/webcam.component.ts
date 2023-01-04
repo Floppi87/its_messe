@@ -18,10 +18,12 @@ export class WebcamComponent implements OnInit {
   ngOnInit() {
 
   }
-  public getSnapshot(): void {
+  public getSnapshot($event: any): void {
+    $event.preventDefault();
     this.trigger.next(void 0);
   }
-  public deleteSnapshot(): void {
+  public deleteSnapshot($event: any): void {
+    $event.preventDefault();
     this.sysImage = '';
     this.imgEmitter.emit(this.sysImage)
   }
