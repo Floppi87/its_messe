@@ -5,5 +5,6 @@
     <its-webcam-form *ngIf="currentPhase == 2" (result) ="onResult(2, $event)"></its-webcam-form>
     <its-company-form *ngIf="currentPhase == 3" (result) ="onResult(3, $event)"></its-company-form>
     <its-interest-form *ngIf="currentPhase == 4" (result) ="onResult(4, $event)"></its-interest-form>
+    <its-finished-form *ngIf="currentPhase == 5 && globalData" [data]="globalData"></its-finished-form>
 </div>
 

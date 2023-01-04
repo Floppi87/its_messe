@@ -17,6 +17,7 @@ export class FormularComponent implements OnInit {
   company: string | undefined;
   products: Product[] | undefined;
 
+  globalData: any;
 
   constructor(private rest: RestService) {
     this.currentPhase = RegisterPhase.Personal;
@@ -56,7 +57,9 @@ export class FormularComponent implements OnInit {
         interests: this.products
       })
 
+      this.globalData = data;
       console.log(data)
+      this.currentPhase = RegisterPhase.Finished;
     } else {
       this.switchPhase();
     }

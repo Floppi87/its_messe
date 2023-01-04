@@ -16,7 +16,8 @@ import { PersonalAdressFormComponent } from './components/formular/personal-adre
 import { WebcamFormComponent } from './components/formular/webcam-form/webcam-form.component';
 import { CompanyFormComponent } from './components/formular/company-form/company-form.component';
 import { InterestFormComponent } from './components/formular/interest-form/interest-form.component';
-import { FormControlComponent } from './components/formular/form-control/form-control.component'
+import { FormControlComponent } from './components/formular/form-control/form-control.component';
+import { FinishedFormComponent } from './components/formular/finished-form/finished-form.component'
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { FormControlComponent } from './components/formular/form-control/form-co
     WebcamFormComponent,
     CompanyFormComponent,
     InterestFormComponent,
-    FormControlComponent
+    FormControlComponent,
+    FinishedFormComponent
   ],
   imports: [
     BrowserModule,
