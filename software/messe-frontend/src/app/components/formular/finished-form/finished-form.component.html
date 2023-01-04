@@ -1,3 +1,52 @@
-{{text}}
+<div class="container">
+    <div class="dataset">
+        <div>Vorname</div>
+        <div>{{data.firstname}}</div>
+    </div>
+    <div class="dataset">
+        <div>Name</div>
+        <div>{{data.surname}}</div>
+    </div>
+    <div class="dataset">
+        <div>E-Mail</div>
+        <div>{{data.email}}</div>
+    </div>
+    <div class="dataset">
+        <div>Telefon</div>
+        <div>{{data.phone}}</div>
+    </div>
+    
+    <div class="dataset">
+        <div>Anschrift</div>
+        <div>
+            <div>
+                {{data.adress.street}} {{data.adress.houseNr}}
+            </div>
+            <div>
+                {{data.adress.plz}} {{data.adress.city}}
+            </div>
+            <div>
+                {{data.adress.country}}
+            </div>
+        </div>
+    </div>
+    <div class="dataset">
+        <div></div>
+        <div><img [src]="data.picture"></div>
+    </div>
+    <div class="dataset">
+        <div>Firma</div>
+        <div>{{data.company.name}}</div>
+    </div>
+    <div class="dataset">
+        <div>Interessen</div>
+        <div>
+            <div *ngFor="let product of data.interests">
+                {{product.name}}
+            </div>
+        </div>
+    </div>
+    
+</div>
 
 <button (click)="register()">Registrieren</button>
