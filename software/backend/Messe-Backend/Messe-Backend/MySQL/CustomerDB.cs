@@ -96,6 +96,7 @@ namespace Messe_Backend.MySQL
                         Name = reader.GetString(1)
                     });
                 }
+                reader.Close();
             }
             return products;
         }
@@ -130,7 +131,7 @@ namespace Messe_Backend.MySQL
                     }
 
                     string phoneNr = "";
-                    if(reader.IsDBNull(4))
+                    if(!reader.IsDBNull(4))
                     {
                         phoneNr = reader.GetString(4);
                     }
@@ -152,6 +153,7 @@ namespace Messe_Backend.MySQL
                         Interests = GetProducts(reader.GetInt32(0))
                     });
                 }
+                    reader.Close();
             }
             return personDatas;
         }
@@ -170,6 +172,7 @@ namespace Messe_Backend.MySQL
                         Name = reader.GetString(1)
                     });
                 }
+                reader.Close();
             }
             return products;
         }

@@ -1,1 +1,44 @@
-<p>customer-list works!</p>
+<div class="container">
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        Vorname
+                    </th>
+                    <th>
+                        Nachname
+                    </th>
+                    <th>
+                        E-Mail
+                    </th>
+                    <th>
+                        Telefon
+                    </th>
+                    <th>
+                        Addresse
+                    </th>
+                    <th>
+                        Firma
+                    </th>
+                    <th>
+                        Interessen
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let customer of customerList">
+                    <td><img class="img-thumbnail w-50" [src]="customer.picture"></td>
+                    <td>{{customer.firstname}}</td>
+                    <td>{{customer.surname}}</td>
+                    <td>{{customer.email}}</td>
+                    <td>{{customer.phone}}</td>
+                    <td>{{customer.adress.street}} {{customer.adress.houseNr}}<br> {{customer.adress.plz}} {{customer.adress.city}}</td>
+                    <td>{{customer.company.name}}</td>
+                    <td><ul><li *ngFor="let product of customer.interests">{{product.name}}</li></ul></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

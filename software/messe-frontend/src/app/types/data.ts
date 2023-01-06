@@ -3,11 +3,10 @@ export interface PersonData {
     firstname: string;
     email: string;
     phone: string;
-    plz: number;
-    city: string;
-    street: string;
-    houseNr: string;
+    adress: AdressFragment;
     picture: string;
+    company: CompanyFragment;
+    interests: Product[];
 }
 export interface PersonalFragment {
     surname: string;
@@ -21,6 +20,11 @@ export interface AdressFragment {
     street: string;
     houseNr: string;
     country: string;
+}
+
+export interface CompanyFragment {
+    id: number;
+    name: string;
 }
 
 
