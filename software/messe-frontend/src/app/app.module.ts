@@ -13,6 +13,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { WebcamFormComponent } from './components/base/formular/webcam-form/webcam-form.component';
 import { InterestFormComponent } from './components/base/formular/interest-form/interest-form.component';
+import { FinishedComponent } from './components/base/formular/finished/finished.component';
+import { CustomerListComponent } from './components/admin/customer-list/customer-list.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { InterestFormComponent } from './components/base/formular/interest-form/
     RequiredStarComponent,
     WebcamComponent,
     WebcamFormComponent,
-    InterestFormComponent
+    InterestFormComponent,
+    FinishedComponent,
+    CustomerListComponent
   ],
   imports: [
     BrowserModule,

@@ -44,5 +44,19 @@ namespace Messe_Backend.Controllers
             
             
         }
+
+        [HttpGet("customers")]
+        public IActionResult GetCustomers()
+        {
+            try
+            {
+                List<PersonData> personDatas = db.GetPersonDatas();
+                return Ok(personDatas);
+            } 
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

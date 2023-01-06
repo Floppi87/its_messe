@@ -100,6 +100,80 @@ namespace Messe_Backend.MySQL
             return products;
         }
 
+
+        public List<PersonData> GetPersonDatas()
+        {
+            Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+            string sql = "SELECT customers.ID, Surname, Firstname, Email, Phone, Street, Housenumber, City, Postcode, Picture, companies.ID, companies.Name FROM customers LEFT JOIN companies ON customers.Company = companies.ID";
+
+            List<PersonData> personDatas = new List<PersonData>();
+
+            using(MySqlDataReader reader = mysql.GetReader(sql))
+            {
+                while (reader.Read())
+                {
+                    Company company;
+                    if(reader.IsDBNull(10))
+                    {
+                        company = new Company()
+                        {
+                         ID = -1,
+                         Name = ""
+                        };
+                    } else
+                    {
+                        company = new Company()
+                        {
+                            ID = reader.GetInt32(10),
+                            Name = reader.GetString(11)
+                        };
+                    }
+
+                    string phoneNr = "";
+                    if(reader.IsDBNull(4))
+                    {
+                        phoneNr = reader.GetString(4);
+                    }
+                    personDatas.Add(new PersonData()
+                    {
+                        Surname = reader.GetString(1),
+                        Firstname = reader.GetString(2),
+                        Email = reader.GetString(3),
+                        Phone = phoneNr,
+                        Adress = new Adress()
+                        {
+                            Street = reader.GetString(5),
+                            HouseNr = reader.GetString(6),
+                            City = reader.GetString(7),
+                            Plz = reader.GetInt32(8)
+                        },
+                        Picture = reader.GetString(9),
+                        Company = company,
+                        Interests = GetProducts(reader.GetInt32(0))
+                    });
+                }
+            }
+            return personDatas;
+        }
+        private List<Product> GetProducts(int customerId)
+        {
+            Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+            string sql = "SELECT products.ID, products.Name FROM interests INNER JOIN products ON interests.Product = products.ID WHERE interests.Customer = "+customerId;
+            List<Product> products = new List<Product>();
+            using (MySqlDataReader reader = mysql.GetReader(sql))
+            {
+                while (reader.Read())
+                {
+                    products.Add(new Product()
+                    {
+                        ID = reader.GetInt32(0),
+                        Name = reader.GetString(1)
+                    });
+                }
+            }
+            return products;
+        }
+
         public static string Base64Encode(string plainText)
         {
             byte[] plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
