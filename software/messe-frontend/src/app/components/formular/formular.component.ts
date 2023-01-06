@@ -3,7 +3,7 @@ import { RestService } from 'src/app/services/rest.service';
 import { AdressFragment, PersonalFragment, Product, RegisterPhase } from 'src/app/types/data';
 
 @Component({
-  selector: 'its-formular',
+  selector: 'its-formular-old',
   templateUrl: './formular.component.html',
   styleUrls: ['./formular.component.css']
 })
@@ -80,4 +80,7 @@ export class FormularComponent implements OnInit {
     }
   }
 
+  onControl(event: any) {
+    
+  }
 }

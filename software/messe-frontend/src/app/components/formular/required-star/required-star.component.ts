@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'its-req-star',
@@ -7,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RequiredStarComponent implements OnInit {
 
-  constructor() { }
+  @Input("errMsg") showMsg: boolean;
+  constructor() {
+    this.showMsg = false;
+  }
 
   ngOnInit(): void {
   }

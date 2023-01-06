@@ -19,11 +19,6 @@ export class WebcamFormComponent implements OnInit {
 
   setImg(event: string) {
     this.webcamImg = event;
-  }
-
-  onControl(event: ControlAction) {
-    if(event === ControlAction.Next) {
-      this.result.emit(this.webcamImg);
-    }
+    this.result.emit(this.webcamImg)
   }
 }

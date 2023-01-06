@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { WebcamImage } from 'ngx-webcam';
 import { Subject, Observable } from 'rxjs';
 
@@ -13,14 +13,16 @@ export class WebcamComponent implements OnInit {
   private nextWebcam: Subject<any> = new Subject();
   sysImage = '';
 
-  width: number = 640;
-  height: number = 362;
+  width: number = 368;
+  height: number = 208;
 
   @Output("image") imgEmitter = new EventEmitter<string>();
 
   ngOnInit() {
 
   }
+
+
   public getSnapshot($event: any): void {
     $event.preventDefault();
     this.trigger.next(void 0);

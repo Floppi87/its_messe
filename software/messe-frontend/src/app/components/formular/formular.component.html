@@ -7,4 +7,5 @@
     <its-interest-form *ngIf="currentPhase == 4" (result) ="onResult(4, $event)"></its-interest-form>
     <its-finished-form *ngIf="currentPhase == 5 && globalData" [data]="globalData"></its-finished-form>
 </div>
+<its-form-control (action) = "onControl($event)"></its-form-control>
 

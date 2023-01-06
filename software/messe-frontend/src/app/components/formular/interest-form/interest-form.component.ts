@@ -33,6 +33,8 @@ export class InterestFormComponent implements OnInit {
     if(!found) {
       this.selectedIDs.push(product)
     }
+
+    this.result.emit(this.selectedIDs)
   }
 
   prepareFragment() {

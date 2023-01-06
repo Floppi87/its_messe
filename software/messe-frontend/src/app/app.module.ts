@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormularComponent } from './components/formular/formular.component';
+import { FormularComponent } from './components/base/formular/formular.component';
 import { MainComponent } from './components/base/main/main.component';
 import { RequiredStarComponent } from './components/formular/required-star/required-star.component';
 import { WebcamModule } from 'ngx-webcam';

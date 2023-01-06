@@ -1,16 +1,22 @@
-<div class="container" *ngIf="sysImage">
-    <img
-    [height] = "height"
-    [width] = "width"
+<div class="container" *ngIf="sysImage" id="prev-wrapper">
+  <div class="row">
+    <img class="img-fluid"
      [src]="sysImage">
-    <button (click) = "deleteSnapshot($event)">Delete</button>
+  </div>
+    <div class="row"><button class="btn btn-outline-danger" (click) = "deleteSnapshot($event)">Delete</button></div>
+    
 </div>
 <div class="container" *ngIf="!sysImage">
-    <webcam
-      [trigger]="invokeObservable"
-      (imageCapture)="captureImg($event)"
+  <div class="row">
+    <webcam class="img-fluid"
       [height] = "height"
       [width] = "width"
+      [trigger]="invokeObservable"
+      (imageCapture)="captureImg($event)"
     ></webcam>
-    <button (click) = "getSnapshot($event)">Click</button>
+  </div>
+    <div class="row">
+      <button class="btn btn-outline-primary" (click) = "getSnapshot($event)">Click</button>
+    </div>
+    
 </div>
