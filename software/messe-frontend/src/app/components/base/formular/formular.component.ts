@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { RestService } from 'src/app/services/rest.service';
 import { Product } from 'src/app/types/data';
 
@@ -56,7 +57,15 @@ export class FormularComponent implements OnInit {
   }
   
   sendData() {
-    this.rest.registerCustomer(this.data).subscribe(resp => {
+    this.rest.registerCustomer(this.data).pipe(catchError(err => {
+      let dupEntry = (<string>err.error).match(".*Duplicate entry.* for key 'Email'")
+      if(dupEntry && dupEntry.length > 0) {
+        window.alert("Die E-Mail Addresse ist bereits registriert!")
+      } else {
+        window.alert(err.error)
+      }
+      return throwError(() => new Error());
+    })).subscribe(resp => {
       console.log(resp);
       this.router.navigate(["/success"]);
     });

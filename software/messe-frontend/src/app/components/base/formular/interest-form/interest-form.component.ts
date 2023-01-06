@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
 import { RestService } from 'src/app/services/rest.service';
 import { ControlAction, Product } from 'src/app/types/data';
 
@@ -13,7 +14,10 @@ export class InterestFormComponent implements OnInit {
   products: Product[] = [];
   selectedIDs: Product[] = [];
   constructor(private rest: RestService) {
-    this.rest.getProducts().subscribe(resp => {
+    this.rest.getProducts().pipe(catchError(err => {
+      window.alert("Fehler beim Laden der Produktgruppen")
+      return throwError(() => new Error());
+    })).subscribe(resp => {
       this.products = <Product[]>resp
     })
   }
