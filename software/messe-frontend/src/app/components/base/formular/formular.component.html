@@ -1,60 +1,52 @@
 <form (submit)="validate()">
     <div class="container">
-        <div class="row">
+        <div class="row logo">
+            <div class="col-8">
+            </div>
+            <div class="col-3">
+                <img src="../../../../assets/LogoJanine.png" class="img-fluid" alt="Logo der Ritter und Partner Steuerberatungs GmbH">
+            </div>
+            </div>
+        <div class="container">
+        <div class="row title">
+            <div class="col-8">
+                <h2>Anmeldung DIAMOND Mitgliedschaft</h2>
+            </div>
+            <div class="col-4"></div>
+        </div>
+    </div>
+        <div class="row mainBody">
+            <div class="row">
             <div class="col-8">
                 <div class="container">
                     <div class="row">
                         <label class="form-label">
-                            <input class="form-control" id="company" type="text" name="company" [(ngModel)] = "data.company.name">
+                            <input class="form-control textInput" id="company" type="text" name="company" [(ngModel)] = "data.company.name">
                             Firmenname (nur bei Firmenkunden)
                         </label>
                     </div>
                     <div class="row">
                         <label class="form-label">
-                            <input class="form-control" id="firstname" type="text" name="firstname" required [(ngModel)] = "data.firstname">
+                            <input class="form-control textInput" id="firstname" type="text" name="firstname" required [(ngModel)] = "data.firstname">
                             Vorname <its-req-star [errMsg]="validated && data.firstname == ''"></its-req-star>
                         </label>
                     </div>
                     <div class="row">
                         <label class="form-label">
-                            <input class="form-control" id="surname" type="text" name="surname" required [(ngModel)] = "data.surname">
+                            <input class="form-control textInput" id="surname" type="text" name="surname" required [(ngModel)] = "data.surname">
                             Nachname <its-req-star [errMsg]="validated && data.surname == ''"></its-req-star>
                         </label>
                     </div>
                     <div class="row">
                         <label class="form-label">
-                            <input class="form-control" id="email" type="email" name="email" required [(ngModel)] = "data.email">
+                            <input class="form-control textInput" id="email" type="email" name="email" required [(ngModel)] = "data.email">
                             E-Mail <its-req-star [errMsg]="validated && data.email == ''"></its-req-star>
                         </label>
                     </div>
                     <div class="row">
                         <label class="form-label">
-                            <input class="form-control" id="phone" type="tel" name="phone" [(ngModel)] = "data.phone">
+                            <input class="form-control textInput" id="phone" type="tel" name="phone" [(ngModel)] = "data.phone">
                             Telefonnummer
-                        </label>
-                    </div>
-                    <div class="row">
-                        <label class="form-label">
-                            <input class="form-control" type="text" name="street" id="street" [(ngModel)] = "data.adress.street">
-                            Straße <its-req-star [errMsg]="validated && data.adress.street == ''"></its-req-star>
-                        </label>
-                    </div>
-                    <div class="row">
-                        <label class="form-label">
-                            <input class="form-control" type="text" name="housenumber" id="houseNr" [(ngModel)] = "data.adress.houseNr">
-                            Hausnummer <its-req-star [errMsg]="validated && data.adress.houseNr == ''"></its-req-star>
-                        </label>
-                    </div>
-                    <div class="row">
-                        <label class="form-label">
-                            <input class="form-control" type="text" name="city" id="city" [(ngModel)] = "data.adress.city">
-                            Stadt <its-req-star [errMsg]="validated && data.adress.city == ''"></its-req-star>
-                        </label>
-                    </div>
-                    <div class="row">
-                        <label class="form-label">
-                            <input class="form-control" type="number" name="postcode" id="plz" [(ngModel)] = "data.adress.plz">
-                            Postleitzahl <its-req-star [errMsg]="validated && data.adress.plz == ''"></its-req-star>
                         </label>
                     </div>
                 </div>
@@ -66,15 +58,56 @@
                         <its-webcam-form (result)="onSnapshot($event)"></its-webcam-form>
                         <div class="text-danger" *ngIf="validated && data.picture == ''">Bitte nehmen Sie ein Portrait von sich auf!</div>
                     </div>
-                    <div class="row">
-                        <div class="h5">Bitte wählen Sie eine oder mehrere Produkte aus, für die Sie sich besonders interessieren. <its-req-star></its-req-star></div>
-                        <its-interest-form (result)="onInterest($event)"></its-interest-form>
-                        <div class="text-danger" *ngIf="validated && data.interests.length <= 0">Bitte wählen Sie mindestens eine Produktgruppe, für die Sie sich interessieren, aus.</div>
-                    </div>
                 </div>
             </div>
         </div>
+            <div class="row">
+            <div class="col-8">
+                <div class="container">
+                <div class="row">
+                    <label class="form-label">
+                        <input class="form-control textInput" type="text" name="street" id="street" [(ngModel)] = "data.adress.street">
+                        Straße <its-req-star [errMsg]="validated && data.adress.street == ''"></its-req-star>
+                    </label>
+                </div>
+            </div>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <label class="form-label">
+                        <input class="form-control textInput" type="text" name="housenumber" id="houseNr" [(ngModel)] = "data.adress.houseNr">
+                        Hausnummer <its-req-star [errMsg]="validated && data.adress.houseNr == ''"></its-req-star>
+                    </label>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-8">
+                    <div class="container">
+                    <div class="row">
+                        <label class="form-label">
+                            <input class="form-control textInput" type="text" name="city" id="city" [(ngModel)] = "data.adress.city">
+                            Stadt <its-req-star [errMsg]="validated && data.adress.city == ''"></its-req-star>
+                        </label>
+                    </div>
+                </div>
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <label class="form-label">
+                            <input class="form-control textInput" type="number" name="postcode" id="plz" [(ngModel)] = "data.adress.plz">
+                            Postleitzahl <its-req-star [errMsg]="validated && data.adress.plz == ''"></its-req-star>
+                        </label>
+                </div>
+            </div>
+        </div>
+        </div>
         <div class="row">
+            <div class="h5">Bitte wählen Sie eine oder mehrere Produkte aus, für die Sie sich besonders interessieren. <its-req-star></its-req-star></div>
+            <its-interest-form (result)="onInterest($event)"></its-interest-form>
+            <div class="text-danger" *ngIf="validated && data.interests.length <= 0">Bitte wählen Sie mindestens eine Produktgruppe, für die Sie sich interessieren, aus.</div>
+        </div>
+        <div class="row p-4">
             <input class="form-control btn btn-outline-primary btn-lg" type="submit" value="Registrieren">
         </div>
     </div>
