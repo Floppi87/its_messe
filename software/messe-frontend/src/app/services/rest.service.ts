@@ -10,9 +10,7 @@ export class RestService {
   constructor(private http: HttpClient) { }
 
   registerCustomer(data: any) {
-    this.http.post("http://localhost:5085/api/v1/data", data, {observe: "response"}).subscribe(resp => {
-      console.log(resp)
-    })
+    return this.http.post("http://localhost:5085/api/v1/data", data, {observe: "response"})
   }
 
   getProducts() {

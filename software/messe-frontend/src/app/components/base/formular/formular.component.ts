@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RestService } from 'src/app/services/rest.service';
 import { Product } from 'src/app/types/data';
 
@@ -10,7 +11,7 @@ import { Product } from 'src/app/types/data';
 export class FormularComponent implements OnInit {
 
   validated: boolean;
-  constructor(private rest: RestService) {
+  constructor(private rest: RestService, private router: Router) {
     this.validated = false;
   }
   data = {
@@ -55,7 +56,10 @@ export class FormularComponent implements OnInit {
   }
   
   sendData() {
-    this.rest.registerCustomer(this.data);
+    this.rest.registerCustomer(this.data).subscribe(resp => {
+      console.log(resp);
+      this.router.navigate(["/success"]);
+    });
   }
 
 }
