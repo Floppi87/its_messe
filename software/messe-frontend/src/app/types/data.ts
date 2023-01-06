@@ -7,7 +7,6 @@ export interface PersonData {
     city: string;
     street: string;
     houseNr: string;
-    country: string;
     picture: string;
 }
 export interface PersonalFragment {

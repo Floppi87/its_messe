@@ -48,11 +48,14 @@ export class FormularComponent implements OnInit {
     let valid: boolean = !!this.data.firstname && !!this.data.surname && !!this.data.email && !!this.data.picture && !!this.data.adress.city && !!this.data.adress.houseNr && !!this.data.adress.plz && !!this.data.adress.street && (this.data.interests.length > 0);
     console.log(valid)
     console.log(this.data)
+    if(valid) {
+      this.sendData();
+    }
     return valid;
   }
   
   sendData() {
-
+    this.rest.registerCustomer(this.data);
   }
 
 }

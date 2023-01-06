@@ -5,7 +5,7 @@
                 <div class="container">
                     <div class="row">
                         <label class="form-label">
-                            <input class="form-control" id="company" type="text" name="company">
+                            <input class="form-control" id="company" type="text" name="company" [(ngModel)] = "data.company.name">
                             Firmenname (nur bei Firmenkunden)
                         </label>
                     </div>
@@ -62,10 +62,12 @@
             <div class="col-4">
                 <div class="container">
                     <div class="row">
+                        <div class="h5">Bitte nehmen Sie ein Portrait von sich auf. <its-req-star></its-req-star></div>
                         <its-webcam-form (result)="onSnapshot($event)"></its-webcam-form>
                         <div class="text-danger" *ngIf="validated && data.picture == ''">Bitte nehmen Sie ein Portrait von sich auf!</div>
                     </div>
                     <div class="row">
+                        <div class="h5">Bitte wählen Sie eine oder mehrere Produkte aus, für die Sie sich besonders interessieren. <its-req-star></its-req-star></div>
                         <its-interest-form (result)="onInterest($event)"></its-interest-form>
                         <div class="text-danger" *ngIf="validated && data.interests.length <= 0">Bitte wählen Sie mindestens eine Produktgruppe, für die Sie sich interessieren, aus.</div>
                     </div>
