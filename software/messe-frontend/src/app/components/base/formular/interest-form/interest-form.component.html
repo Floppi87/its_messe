@@ -1,6 +1,5 @@
-<div class="container">
+
     <label *ngFor="let product of products">
         <input type="checkbox" value="{{product.id}}" name="{{product.id}}" (change)="onChange(product)">
         {{product.name}}
     </label>
-</div>
