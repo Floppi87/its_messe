@@ -150,14 +150,14 @@ namespace Messe_Backend.MySQL
                         },
                         Picture = reader.GetString(9),
                         Company = company,
-                        Interests = GetProducts(reader.GetInt32(0))
+                        Interests = GetInterests(reader.GetInt32(0))
                     });
                 }
                     reader.Close();
             }
             return personDatas;
         }
-        private List<Product> GetProducts(int customerId)
+        private List<Product> GetInterests(int customerId)
         {
             Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
             string sql = "SELECT products.ID, products.Name FROM interests INNER JOIN products ON interests.Product = products.ID WHERE interests.Customer = "+customerId;
@@ -175,17 +175,6 @@ namespace Messe_Backend.MySQL
                 reader.Close();
             }
             return products;
-        }
-
-        public static string Base64Encode(string plainText)
-        {
-            byte[] plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
-        }
-        public static string Base64Decode(string base64EncodedData)
-        {
-            byte[] base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }
