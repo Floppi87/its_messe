@@ -40,6 +40,8 @@ export class CustomerListComponent implements OnInit {
   }
 
   syncDB() {
-    this.rest.syncDatabase();
+    this.rest.syncDatabase().subscribe(resp => {
+      console.log(resp)
+    });
   }
 }
