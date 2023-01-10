@@ -14,7 +14,7 @@
             </div>
             <div class="col-4"></div>
         </div>
-    </div>
+    </div> 
         <div class="row mainBody">
             <div class="row">
             <div class="col-8">
@@ -102,11 +102,13 @@
             </div>
         </div>
         </div>
+        <div class="container">
         <div class="row">
-            <div class="h5">Bitte wählen Sie eine oder mehrere Produkte aus, für die Sie sich besonders interessieren. <its-req-star></its-req-star></div>
+            <div class="h3">Bitte wählen Sie eine oder mehrere Produkte aus, für die Sie sich besonders interessieren. <its-req-star></its-req-star></div>
             <its-interest-form (result)="onInterest($event)"></its-interest-form>
             <div class="text-danger" *ngIf="validated && data.interests.length <= 0">Bitte wählen Sie mindestens eine Produktgruppe, für die Sie sich interessieren, aus.</div>
         </div>
+    </div>
         <div class="row p-4">
             <input class="form-control btn btn-outline-primary btn-lg" type="submit" value="Registrieren">
         </div>
