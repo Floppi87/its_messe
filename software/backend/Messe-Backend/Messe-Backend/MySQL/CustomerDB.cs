@@ -39,7 +39,6 @@ namespace Messe_Backend.MySQL
 
             try
             {
-                //check Mail
                 string sqlMail = "SELECT * FROM customers WHERE customers.Email = @email";
                 Dictionary<string, object> parameterMail = new Dictionary<string, object>();
                 parameterMail.Add("@email", personData.Email);
@@ -47,7 +46,7 @@ namespace Messe_Backend.MySQL
                 using (MySqlDataReader reader = mysql.GetReader(sqlMail, parameterMail))
                 {
                     if (reader.Read())
-                        throw new Exception();
+                        throw new Exception("Duplicate entry '"+personData.Email+"' for key 'Email'");
                     reader.Close();
                 }
 
