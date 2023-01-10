@@ -234,13 +234,13 @@ namespace Messe_Backend.MySQL
         {
             Connection mysqlOnline = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
             Connection mysqlOffline = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
-
-            List<PersonData> savedPersons = GetPersonDatas(true);
-
-            foreach (PersonData personData in savedPersons)
+            try
             {
-                try
+                List<PersonData> savedPersons = GetPersonDatas(true);
+
+                foreach (PersonData personData in savedPersons)
                 {
+
                     RegisterCustomer(personData);
                     string sqlDelIn = "DELETE FROM interests WHERE interests.Customer = (SELECT customers.ID FROM customers WHERE Email = @email)";
                     Dictionary<string, object> parameterDelIn = new Dictionary<string, object>();
@@ -256,13 +256,14 @@ namespace Messe_Backend.MySQL
                     {
                         reader.Close();
                     }
+                }
 
                 }
                 catch (Exception ex)
                 {
                     return false;
                 }
-            }
+            
             return true;
         }
 
