@@ -26,6 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 app.UseAuthorization();
+app.UseStaticFiles();
 
 app.MapControllers();
 
