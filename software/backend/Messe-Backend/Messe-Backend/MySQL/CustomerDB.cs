@@ -1,6 +1,7 @@
 ﻿using Messe_Backend.Models;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
+using Org.BouncyCastle.Asn1.X509.SigI;
 using System.Buffers.Text;
 using System.Reflection.PortableExecutable;
 using System.Text;
@@ -39,37 +40,30 @@ namespace Messe_Backend.MySQL
 
             try
             {
-                string sqlMail = "SELECT * FROM customers WHERE customers.Email = @email";
-                Dictionary<string, object> parameterMail = new Dictionary<string, object>();
-                parameterMail.Add("@email", personData.Email);
-
-                using (MySqlDataReader reader = mysql.GetReader(sqlMail, parameterMail))
+                if (checkEmail(mysql, personData.Email))
                 {
-                    if (reader.Read())
-                        throw new Exception("Duplicate entry '"+personData.Email+"' for key 'Email'");
-                    reader.Close();
+
+                    if (!String.IsNullOrEmpty(personData.Company.Name))
+                    {
+                        RegisterCompany(personData, useAlt);
+                    }
+
+                    string sql = "INSERT INTO customers (Surname, Firstname, Email, Phone, Street, Housenumber, City, Postcode, Picture, Company) VALUES (@surname, @firstname, @email, @phone, @street, @housenr, @city, @postcode, @picture, (SELECT ID FROM companies WHERE Name = @company))";
+                    Dictionary<string, object> parameter = new Dictionary<string, object>();
+                    parameter.Add("@surname", personData.Surname);
+                    parameter.Add("@firstname", personData.Firstname);
+                    parameter.Add("@email", personData.Email);
+                    parameter.Add("@phone", personData.Phone);
+                    parameter.Add("@street", personData.Adress.Street);
+                    parameter.Add("@housenr", personData.Adress.HouseNr);
+                    parameter.Add("@city", personData.Adress.City);
+                    parameter.Add("@postcode", personData.Adress.Plz);
+                    parameter.Add("@picture", personData.Picture);
+                    parameter.Add("@company", personData.Company.Name);
+
+                    mysql.ExecuteNonQuery(sql, parameter);
+                    LinkCustomerToProduct(personData, useAlt);
                 }
-
-                if (!String.IsNullOrEmpty(personData.Company.Name))
-                {
-                    RegisterCompany(personData, useAlt);
-                }
-
-                string sql = "INSERT INTO customers (Surname, Firstname, Email, Phone, Street, Housenumber, City, Postcode, Picture, Company) VALUES (@surname, @firstname, @email, @phone, @street, @housenr, @city, @postcode, @picture, (SELECT ID FROM companies WHERE Name = @company))";
-                Dictionary<string, object> parameter = new Dictionary<string, object>();
-                parameter.Add("@surname", personData.Surname);
-                parameter.Add("@firstname", personData.Firstname);
-                parameter.Add("@email", personData.Email);
-                parameter.Add("@phone", personData.Phone);
-                parameter.Add("@street", personData.Adress.Street);
-                parameter.Add("@housenr", personData.Adress.HouseNr);
-                parameter.Add("@city", personData.Adress.City);
-                parameter.Add("@postcode", personData.Adress.Plz);
-                parameter.Add("@picture", personData.Picture);
-                parameter.Add("@company", personData.Company.Name);
-
-                mysql.ExecuteNonQuery(sql, parameter);
-                LinkCustomerToProduct(personData, useAlt);
             }
             catch (MySqlException ex)
             {
@@ -133,7 +127,6 @@ namespace Messe_Backend.MySQL
             else
             {
                 mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
-                SyncDatabases();
             }
 
 
@@ -242,20 +235,7 @@ namespace Messe_Backend.MySQL
                 {
 
                     RegisterCustomer(personData);
-                    string sqlDelIn = "DELETE FROM interests WHERE interests.Customer = (SELECT customers.ID FROM customers WHERE Email = @email)";
-                    Dictionary<string, object> parameterDelIn = new Dictionary<string, object>();
-                    parameterDelIn.Add("@email", personData.Email);
-                    using (MySqlDataReader reader = mysqlOffline.GetReader(sqlDelIn, parameterDelIn))
-                    {
-                        reader.Close();
-                    }
-                    string sqlDel = "DELETE FROM customers WHERE customers.Email = @email";
-                    Dictionary<string, object> parameterDel = new Dictionary<string, object>();
-                    parameterDel.Add("@email", personData.Email);
-                    using (MySqlDataReader reader = mysqlOffline.GetReader(sqlDel, parameterDel))
-                    {
-                        reader.Close();
-                    }
+                    deleteUser(mysqlOffline, personData.Email);
                 }
 
                 }
@@ -302,6 +282,42 @@ namespace Messe_Backend.MySQL
                 reader.Close();
             }
             return products;
+        }
+
+        private bool checkEmail(Connection connection,string mail)
+        {
+            string sqlMail = "SELECT * FROM customers WHERE customers.Email = @email";
+            Dictionary<string, object> parameterMail = new Dictionary<string, object>();
+            parameterMail.Add("@email", mail);
+
+            using (MySqlDataReader reader = connection.GetReader(sqlMail, parameterMail))
+            {
+                if (reader.Read())
+                    throw new Exception("Duplicate entry '" + mail + "' for key 'Email'");
+                reader.Close();
+            }
+            return true;
+        }
+
+        private void deleteUser(Connection connection, string mail)
+        {
+            if (checkEmail(connection, mail))
+            {
+                string sqlDelIn = "DELETE FROM interests WHERE interests.Customer = (SELECT customers.ID FROM customers WHERE Email = @email)";
+                Dictionary<string, object> parameterDelIn = new Dictionary<string, object>();
+                parameterDelIn.Add("@email", mail);
+                using (MySqlDataReader reader = connection.GetReader(sqlDelIn, parameterDelIn))
+                {
+                    reader.Close();
+                }
+                string sqlDel = "DELETE FROM customers WHERE customers.Email = @email";
+                Dictionary<string, object> parameterDel = new Dictionary<string, object>();
+                parameterDel.Add("@email", mail);
+                using (MySqlDataReader reader = connection.GetReader(sqlDel, parameterDel))
+                {
+                    reader.Close();
+                }
+            }
         }
     }
 }
