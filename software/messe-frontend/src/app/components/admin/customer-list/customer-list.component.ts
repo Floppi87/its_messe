@@ -13,11 +13,11 @@ export class CustomerListComponent implements OnInit {
   customerList: PersonData[] = [];
   constructor(private rest: RestService, private router: Router) {
 
-    this.requestPassword();
     this.getCustomers()
   }
 
   ngOnInit(): void {
+    this.requestPassword();
   }
 
   requestPassword() {
@@ -37,5 +37,9 @@ export class CustomerListComponent implements OnInit {
       console.log(resp)
       this.customerList = <PersonData[]>resp;
     })
+  }
+
+  syncDB() {
+    this.rest.syncDatabase();
   }
 }

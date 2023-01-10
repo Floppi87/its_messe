@@ -20,4 +20,8 @@ export class RestService {
   getCustomers() {
     return this.http.get("http://localhost:5085/api/v1/customers")
   }
+
+  syncDatabase() {
+    return this.http.get("http://localhost:5085/api/v1/sync")
+  }
 }

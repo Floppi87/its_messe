@@ -102,6 +102,7 @@ namespace Messe_Backend.MySQL
 
                     mysql.ExecuteNonQuery(insertToCompanySql, parameter);
                 }
+                reader.Close();
 
             }
         }
