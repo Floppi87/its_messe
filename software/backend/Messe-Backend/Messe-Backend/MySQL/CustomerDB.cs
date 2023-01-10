@@ -1,7 +1,10 @@
 ﻿using Messe_Backend.Models;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI;
 using System.Buffers.Text;
+using System.Reflection.PortableExecutable;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Messe_Backend.MySQL
 {
@@ -12,6 +15,7 @@ namespace Messe_Backend.MySQL
         private readonly string _dbPassword;
         private readonly string _dbName;
         private readonly string _dbIp;
+        private readonly string _dbIpAlt;
 
         public CustomerDB()
         {
@@ -19,109 +23,176 @@ namespace Messe_Backend.MySQL
             this._dbName = "messe";
             this._dbIp = "ks.kivitas.de";
             this._dbPassword = "ICF!U0jlWNapKj.L";
+            this._dbIpAlt = "127.0.0.1";
         }
 
-        public void RegisterCustomer(PersonData personData)
+        public void RegisterCustomer(PersonData personData, bool useAlt = false)
         {
-            if(!String.IsNullOrEmpty(personData.Company.Name))
+
+
+            Connection mysql;
+            if (useAlt)
+                mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
+            else
+                mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+
+
+            try
             {
-                RegisterCompany(personData);
+                //check Mail
+                string sqlMail = "SELECT * FROM customers WHERE customers.Email = @email";
+                Dictionary<string, object> parameterMail = new Dictionary<string, object>();
+                parameterMail.Add("@email", personData.Email);
+
+                using (MySqlDataReader reader = mysql.GetReader(sqlMail, parameterMail))
+                {
+                    if (reader.Read())
+                        throw new Exception();
+                    reader.Close();
+                }
+
+                if (!String.IsNullOrEmpty(personData.Company.Name))
+                {
+                    RegisterCompany(personData, useAlt);
+                }
+
+                string sql = "INSERT INTO customers (Surname, Firstname, Email, Phone, Street, Housenumber, City, Postcode, Picture, Company) VALUES (@surname, @firstname, @email, @phone, @street, @housenr, @city, @postcode, @picture, (SELECT ID FROM companies WHERE Name = @company))";
+                Dictionary<string, object> parameter = new Dictionary<string, object>();
+                parameter.Add("@surname", personData.Surname);
+                parameter.Add("@firstname", personData.Firstname);
+                parameter.Add("@email", personData.Email);
+                parameter.Add("@phone", personData.Phone);
+                parameter.Add("@street", personData.Adress.Street);
+                parameter.Add("@housenr", personData.Adress.HouseNr);
+                parameter.Add("@city", personData.Adress.City);
+                parameter.Add("@postcode", personData.Adress.Plz);
+                parameter.Add("@picture", personData.Picture);
+                parameter.Add("@company", personData.Company.Name);
+
+                mysql.ExecuteNonQuery(sql, parameter);
+                LinkCustomerToProduct(personData, useAlt);
             }
-            
-            Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
-
-            string sql = "INSERT INTO customers (Surname, Firstname, Email, Phone, Street, Housenumber, City, Postcode, Picture, Company) VALUES (@surname, @firstname, @email, @phone, @street, @housenr, @city, @postcode, @picture, (SELECT ID FROM companies WHERE Name = @company))";
-            Dictionary<string, object> parameter = new Dictionary<string, object>();
-            parameter.Add("@surname", personData.Surname);
-            parameter.Add("@firstname", personData.Firstname);
-            parameter.Add("@email", personData.Email);
-            parameter.Add("@phone", personData.Phone);
-            parameter.Add("@street", personData.Adress.Street);
-            parameter.Add("@housenr", personData.Adress.HouseNr);
-            parameter.Add("@city", personData.Adress.City);
-            parameter.Add("@postcode", personData.Adress.Plz);
-            parameter.Add("@picture", personData.Picture);
-            parameter.Add("@company", personData.Company.Name);
-
-            mysql.ExecuteNonQuery(sql, parameter);
-            LinkCustomerToProduct(personData);
+            catch (MySqlException ex)
+            {
+                if (useAlt)
+                {
+                    throw ex;
+                }
+                RegisterCustomer(personData, true);
+            }
         }
 
-        private void RegisterCompany(PersonData personData)
+        private void RegisterCompany(PersonData personData, bool useAlt)
         {
-            Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+            Connection mysql;
+            if (useAlt)
+                mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
+            else
+                mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
 
             string findCompanySql = "SELECT * FROM companies WHERE Name = @name";
             Dictionary<string, object> parameter = new Dictionary<string, object>();
             parameter.Add("@name", personData.Company.Name);
 
-            using(MySqlDataReader reader = mysql.GetReader(findCompanySql, parameter))
+            using (MySqlDataReader reader = mysql.GetReader(findCompanySql, parameter))
             {
                 bool existing = reader.HasRows;
-                if(!existing)
+                if (!existing)
                 {
                     string insertToCompanySql = "INSERT INTO companies (Name) VALUES (@name)";
 
                     mysql.ExecuteNonQuery(insertToCompanySql, parameter);
                 }
-                
+
             }
         }
 
-        private void LinkCustomerToProduct(PersonData personData)
+        private void LinkCustomerToProduct(PersonData personData, bool useAlt)
         {
-            Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+            Connection mysql;
+            if (useAlt)
+                mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
+            else
+                mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
 
             Dictionary<string, object> parameter = new Dictionary<string, object>();
             parameter.Add("@email", personData.Email);
-            foreach(Product product in personData.Interests)
+            foreach (Product product in personData.Interests)
             {
                 mysql.ExecuteNonQuery("INSERT INTO interests (Customer, Product) VALUES ((SELECT ID FROM customers WHERE Email = @email), " + product.ID + ");", parameter);
             }
 
         }
 
-        public List<Product> GetProducts()
+        public List<Product> GetProducts(bool useAlt = false)
         {
-            Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+            Connection mysql;
+
+            if (useAlt)
+                mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
+            else
+            {
+                mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+                SyncDatabases();
+            }
+
+
             string sql = "SELECT * FROM products";
             List<Product> products = new List<Product>();
-            using (MySqlDataReader reader = mysql.GetReader(sql))
+            try
             {
-                while(reader.Read())
+                using (MySqlDataReader reader = mysql.GetReader(sql))
                 {
-                    products.Add(new Product()
+                    while (reader.Read())
                     {
-                        ID = reader.GetInt32(0),
-                        Name = reader.GetString(1)
-                    });
+                        products.Add(new Product()
+                        {
+                            ID = reader.GetInt32(0),
+                            Name = reader.GetString(1)
+                        });
+                    }
+                    reader.Close();
                 }
-                reader.Close();
+                return products;
             }
-            return products;
+            catch (MySqlException ex)
+            {
+                if (useAlt)
+                {
+                    throw ex;
+                }
+                return GetProducts(true);
+            }
         }
 
 
-        public List<PersonData> GetPersonDatas()
+        public List<PersonData> GetPersonDatas(bool useAlt = false)
         {
-            Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+            Connection mysql;
+
+            if (useAlt)
+                mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
+            else
+                mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+
             string sql = "SELECT customers.ID, Surname, Firstname, Email, Phone, Street, Housenumber, City, Postcode, Picture, companies.ID, companies.Name FROM customers LEFT JOIN companies ON customers.Company = companies.ID";
 
             List<PersonData> personDatas = new List<PersonData>();
 
-            using(MySqlDataReader reader = mysql.GetReader(sql))
+            using (MySqlDataReader reader = mysql.GetReader(sql))
             {
                 while (reader.Read())
                 {
                     Company company;
-                    if(reader.IsDBNull(10))
+                    if (reader.IsDBNull(10))
                     {
                         company = new Company()
                         {
-                         ID = -1,
-                         Name = ""
+                            ID = -1,
+                            Name = ""
                         };
-                    } else
+                    }
+                    else
                     {
                         company = new Company()
                         {
@@ -131,7 +202,7 @@ namespace Messe_Backend.MySQL
                     }
 
                     string phoneNr = "";
-                    if(!reader.IsDBNull(4))
+                    if (!reader.IsDBNull(4) || !String.IsNullOrEmpty(reader.GetString(4)))
                     {
                         phoneNr = reader.GetString(4);
                     }
@@ -150,17 +221,72 @@ namespace Messe_Backend.MySQL
                         },
                         Picture = reader.GetString(9),
                         Company = company,
-                        Interests = GetInterests(reader.GetInt32(0))
+                        Interests = GetIntrests(reader.GetInt32(0), useAlt)
                     });
                 }
-                    reader.Close();
+                reader.Close();
             }
             return personDatas;
         }
-        private List<Product> GetInterests(int customerId)
+
+
+        public bool SyncDatabases()
         {
-            Connection mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
-            string sql = "SELECT products.ID, products.Name FROM interests INNER JOIN products ON interests.Product = products.ID WHERE interests.Customer = "+customerId;
+            Connection mysqlOnline = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+            Connection mysqlOffline = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
+
+            List<PersonData> savedPersons = GetPersonDatas(true);
+
+            foreach (PersonData personData in savedPersons)
+            {
+                try
+                {
+                    RegisterCustomer(personData);
+                    string sqlDelIn = "DELETE FROM interests WHERE interests.Customer = (SELECT customers.ID FROM customers WHERE Email = @email)";
+                    Dictionary<string, object> parameterDelIn = new Dictionary<string, object>();
+                    parameterDelIn.Add("@email", personData.Email);
+                    using (MySqlDataReader reader = mysqlOffline.GetReader(sqlDelIn, parameterDelIn))
+                    {
+                        reader.Close();
+                    }
+                    string sqlDel = "DELETE FROM customers WHERE customers.Email = @email";
+                    Dictionary<string, object> parameterDel = new Dictionary<string, object>();
+                    parameterDel.Add("@email", personData.Email);
+                    using (MySqlDataReader reader = mysqlOffline.GetReader(sqlDel, parameterDel))
+                    {
+                        reader.Close();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static string Base64Encode(string plainText)
+        {
+            byte[] plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+        public static string Base64Decode(string base64EncodedData)
+        {
+            byte[] base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
+        private List<Product> GetIntrests(int customerId, bool useAlt)
+        {
+            Connection mysql;
+
+            if (useAlt)
+                mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
+            else
+                mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
+
+            string sql = "SELECT products.ID, products.Name FROM interests INNER JOIN products ON interests.Product = products.ID WHERE interests.Customer = " + customerId;
             List<Product> products = new List<Product>();
             using (MySqlDataReader reader = mysql.GetReader(sql))
             {
