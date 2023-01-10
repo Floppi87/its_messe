@@ -58,5 +58,15 @@ namespace Messe_Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("sync")]
+        public IActionResult Sync()
+        {
+                if (db.SyncDatabases())
+                    return Ok();
+                else
+                    return BadRequest("Sync Failed ");
+            } 
+        }
     }
 }
