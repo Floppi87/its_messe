@@ -69,4 +69,3 @@ namespace Messe_Backend.Controllers
             } 
         }
     }
-}
