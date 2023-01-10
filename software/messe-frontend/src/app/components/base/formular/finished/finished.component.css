@@ -1,0 +1,22 @@
+.head {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainBody {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.benefits {
+    list-style-type: square;
+}
+
+.bottom {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
