@@ -8,6 +8,9 @@ import { PersonData } from '../types/data';
 export class RestService {
 
   serverUrl = isDevMode() ? "http://localhost:5085" : "http://localhost:5000"
+  /**
+   * Injectable Service to provide and handle http request to server
+   */
   constructor(private http: HttpClient) { }
 
   registerCustomer(data: any) {

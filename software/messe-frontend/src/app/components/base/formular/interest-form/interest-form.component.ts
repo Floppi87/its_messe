@@ -10,11 +10,16 @@ import { ControlAction, Product } from 'src/app/types/data';
 })
 export class InterestFormComponent implements OnInit {
 
-  @Output("result") result = new EventEmitter<Product[]>();
+  @Output("result") result = new EventEmitter<Product[]>(); // Output to transfer data to parent component
+
   products: Product[] = [];
   selectedIDs: Product[] = [];
+
   constructor(private rest: RestService) {
+
+    // Getting Product list from backend service 
     this.rest.getProducts().pipe(catchError(err => {
+      // on error
       window.alert("Fehler beim Laden der Produktgruppen")
       return throwError(() => new Error());
     })).subscribe(resp => {
@@ -25,6 +30,7 @@ export class InterestFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /* Gets triggered on change and updates list of selected items */
   onChange(product: Product) {
     let found = false;
     for(let i = 0; i< this.selectedIDs.length; i++) {
@@ -41,11 +47,14 @@ export class InterestFormComponent implements OnInit {
     this.result.emit(this.selectedIDs)
   }
 
+  // Deprecated function for external triggered data transfer, for example a button
   prepareFragment() {
     if(this.selectedIDs.length > 0) {
       this.result.emit(this.selectedIDs);
     }
   }
+
+  
   onControl(event: any) {
     let action = <ControlAction>event;
     if(action == ControlAction.Next) {

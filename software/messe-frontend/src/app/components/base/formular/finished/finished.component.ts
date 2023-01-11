@@ -12,7 +12,7 @@ export class FinishedComponent implements OnInit {
 
   ngOnInit(): void {
     setTimeout(()=> {
-      this.router.navigate(["/"])
+      this.router.navigate(["/"])  // Auto redirect to landing page
     }, 5000)
   }
 

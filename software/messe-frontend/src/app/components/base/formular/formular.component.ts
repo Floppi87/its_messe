@@ -39,14 +39,23 @@ export class FormularComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Saves snaphot given by webcam component
+   */
   onSnapshot(img: string) {
     this.data.picture = img;
   }
 
+  /**
+   * Saves list of product interests
+   */
   onInterest(products: Product[]) {
     this.data.interests = products;
   }
 
+  /**
+   * Checks if the form is valid and the required inputs a filled in and triggers the request to send the data if it is valid
+   */
   validate() {
     this.validated = true;
     let valid: boolean = !!this.data.firstname && !!this.data.surname && !!this.data.email && !!this.data.picture && !!this.data.adress.city && !!this.data.adress.houseNr && !!this.data.adress.plz && !!this.data.adress.street && (this.data.interests.length > 0);
@@ -58,6 +67,9 @@ export class FormularComponent implements OnInit {
     return valid;
   }
   
+  /**
+   * Sends the data to the backend service and handles errors like a duplicate Mail Adress
+   */
   sendData() {
     if(this.sending) {
       return;

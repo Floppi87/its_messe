@@ -24,6 +24,9 @@ export class CustomerListComponent implements OnInit {
     this.requestPassword();
   }
 
+  /*
+   * Shows promot to user to input a passwort and re-routes the user based on the validility of the password
+   */
   requestPassword() {
     let input = window.prompt("Passwort:", "");
     if(!input) {
@@ -36,6 +39,7 @@ export class CustomerListComponent implements OnInit {
     }
   }
 
+  /* Requests list of customers from backend service */
   getCustomers() {
     this.sending = true;
     this.rest.getCustomers().pipe(catchError(err => {
@@ -49,7 +53,7 @@ export class CustomerListComponent implements OnInit {
     })
   }
 
-  
+  /* Triggers a sychronize request */
   syncDB() {
     this.syncing = true;
     this.rest.syncDatabase().pipe(catchError(err => {

@@ -23,15 +23,27 @@ export class WebcamComponent implements OnInit {
   }
 
 
+  /**
+   * Gets the current image of the media stream provided in the ngx-webcam library
+   */
   public getSnapshot($event: any): void {
     $event.preventDefault();
     this.trigger.next(void 0);
   }
+  /**
+   * Removes the taken image and resets the webcam preview
+   * 
+   */
   public deleteSnapshot($event: any): void {
     $event.preventDefault();
     this.sysImage = '';
     this.imgEmitter.emit(this.sysImage)
   }
+
+  /**
+   * Saves the Snapshot and transfers it to parent component as base64
+   * 
+   */
   public captureImg(webcamImage: WebcamImage): void {
     this.webcamImage = webcamImage;
     this.sysImage = webcamImage!.imageAsDataUrl;
