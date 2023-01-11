@@ -172,54 +172,64 @@ namespace Messe_Backend.MySQL
 
             List<PersonData> personDatas = new List<PersonData>();
 
-            using (MySqlDataReader reader = mysql.GetReader(sql))
+            try
             {
-                while (reader.Read())
+                using (MySqlDataReader reader = mysql.GetReader(sql))
                 {
-                    Company company;
-                    if (reader.IsDBNull(10))
+                    while (reader.Read())
                     {
-                        company = new Company()
+                        Company company;
+                        if (reader.IsDBNull(10))
                         {
-                            ID = -1,
-                            Name = ""
-                        };
-                    }
-                    else
-                    {
-                        company = new Company()
+                            company = new Company()
+                            {
+                                ID = -1,
+                                Name = ""
+                            };
+                        }
+                        else
                         {
-                            ID = reader.GetInt32(10),
-                            Name = reader.GetString(11)
-                        };
-                    }
+                            company = new Company()
+                            {
+                                ID = reader.GetInt32(10),
+                                Name = reader.GetString(11)
+                            };
+                        }
 
-                    string phoneNr = "";
-                    if (!reader.IsDBNull(4) || !String.IsNullOrEmpty(reader.GetString(4)))
-                    {
-                        phoneNr = reader.GetString(4);
-                    }
-                    personDatas.Add(new PersonData()
-                    {
-                        Surname = reader.GetString(1),
-                        Firstname = reader.GetString(2),
-                        Email = reader.GetString(3),
-                        Phone = phoneNr,
-                        Adress = new Adress()
+                        string phoneNr = "";
+                        if (!reader.IsDBNull(4) || !String.IsNullOrEmpty(reader.GetString(4)))
                         {
-                            Street = reader.GetString(5),
-                            HouseNr = reader.GetString(6),
-                            City = reader.GetString(7),
-                            Plz = reader.GetInt32(8)
-                        },
-                        Picture = reader.GetString(9),
-                        Company = company,
-                        Interests = GetIntrests(reader.GetInt32(0), useAlt)
-                    });
+                            phoneNr = reader.GetString(4);
+                        }
+                        personDatas.Add(new PersonData()
+                        {
+                            Surname = reader.GetString(1),
+                            Firstname = reader.GetString(2),
+                            Email = reader.GetString(3),
+                            Phone = phoneNr,
+                            Adress = new Adress()
+                            {
+                                Street = reader.GetString(5),
+                                HouseNr = reader.GetString(6),
+                                City = reader.GetString(7),
+                                Plz = reader.GetInt32(8)
+                            },
+                            Picture = reader.GetString(9),
+                            Company = company,
+                            Interests = GetIntrests(reader.GetInt32(0), useAlt)
+                        });
+                    }
+                    reader.Close();
                 }
-                reader.Close();
+                return personDatas;
+            } catch(MySqlException ex)
+            {
+                if (useAlt)
+                {
+                    throw ex;
+                }
+                return GetPersonDatas(true);
             }
-            return personDatas;
         }
 
 
