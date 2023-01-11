@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { PersonData } from '../types/data';
 
 @Injectable({
@@ -7,21 +7,22 @@ import { PersonData } from '../types/data';
 })
 export class RestService {
 
+  serverUrl = isDevMode() ? "http://localhost:5085" : "http://localhost:5000"
   constructor(private http: HttpClient) { }
 
   registerCustomer(data: any) {
-    return this.http.post("http://localhost:5000/api/v1/data", data, {observe: "response"})
+    return this.http.post(this.serverUrl + "/api/v1/data", data, {observe: "response"})
   }
 
   getProducts() {
-    return this.http.get("http://localhost:5000/api/v1/products")
+    return this.http.get(this.serverUrl + "/api/v1/products")
   }
 
   getCustomers() {
-    return this.http.get("http://localhost:5000/api/v1/customers")
+    return this.http.get(this.serverUrl + "/api/v1/customers")
   }
 
   syncDatabase() {
-    return this.http.get("http://localhost:5000/api/v1/sync")
+    return this.http.get(this.serverUrl + "/api/v1/sync")
   }
 }

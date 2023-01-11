@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { RestService } from 'src/app/services/rest.service';
 import { PersonData } from 'src/app/types/data';
 
@@ -11,8 +12,11 @@ import { PersonData } from 'src/app/types/data';
 export class CustomerListComponent implements OnInit {
 
   customerList: PersonData[] = [];
+  sending: boolean;
+  syncing: boolean;
   constructor(private rest: RestService, private router: Router) {
-
+    this.sending = false;
+    this.syncing = false;
     this.getCustomers()
   }
 
@@ -33,14 +37,27 @@ export class CustomerListComponent implements OnInit {
   }
 
   getCustomers() {
-    this.rest.getCustomers().subscribe(resp => {
+    this.sending = true;
+    this.rest.getCustomers().pipe(catchError(err => {
+      this.sending= false;
+      window.alert(err.Message ? err.Message : "Ubekannter Fehler beim Laden der Kunden")
+      return throwError(() => new Error(err));
+    })).subscribe(resp => {
       console.log(resp)
+      this.sending = false
       this.customerList = <PersonData[]>resp;
     })
   }
 
+  
   syncDB() {
-    this.rest.syncDatabase().subscribe(resp => {
+    this.syncing = true;
+    this.rest.syncDatabase().pipe(catchError(err => {
+      this.syncing= false;
+      window.alert(err.Message ? err.Message : "Unbekannter Fehler beim synchronisieren")
+      return throwError(() => new Error(err));
+    })).subscribe(resp => {
+      this.syncing = false;
       console.log(resp)
     });
   }

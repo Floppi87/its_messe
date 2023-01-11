@@ -12,8 +12,10 @@ import { Product } from 'src/app/types/data';
 export class FormularComponent implements OnInit {
 
   validated: boolean;
+  sending: boolean;
   constructor(private rest: RestService, private router: Router) {
     this.validated = false;
+    this.sending = false;
   }
   data = {
     firstname: "",
@@ -57,6 +59,10 @@ export class FormularComponent implements OnInit {
   }
   
   sendData() {
+    if(this.sending) {
+      return;
+    }
+    this.sending = true;
     this.rest.registerCustomer(this.data).pipe(catchError(err => {
       let dupEntry = (<string>err.error).match(".*Duplicate entry.* for key 'Email'")
       if(dupEntry && dupEntry.length > 0) {
@@ -64,9 +70,11 @@ export class FormularComponent implements OnInit {
       } else {
         window.alert(err.error)
       }
+      this.sending = false;
       return throwError(() => new Error());
     })).subscribe(resp => {
       console.log(resp);
+      this.sending = false;
       this.router.navigate(["/success"]);
     });
   }

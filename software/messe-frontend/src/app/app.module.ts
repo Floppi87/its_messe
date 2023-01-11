@@ -15,6 +15,7 @@ import { WebcamFormComponent } from './components/base/formular/webcam-form/webc
 import { InterestFormComponent } from './components/base/formular/interest-form/interest-form.component';
 import { FinishedComponent } from './components/base/formular/finished/finished.component';
 import { CustomerListComponent } from './components/admin/customer-list/customer-list.component';
+import { LoadingComponent } from './components/base/formular/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { CustomerListComponent } from './components/admin/customer-list/customer
     WebcamFormComponent,
     InterestFormComponent,
     FinishedComponent,
-    CustomerListComponent
+    CustomerListComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

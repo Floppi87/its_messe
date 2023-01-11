@@ -110,7 +110,8 @@
         </div>
     </div>
         <div class="row p-4">
-            <input class="form-control btn btn-outline-primary btn-lg" type="submit" value="Registrieren">
+            <its-loading *ngIf="sending"></its-loading>
+            <input *ngIf="!sending" class="form-control btn btn-outline-primary btn-lg" type="submit" value="Registrieren">
         </div>
     </div>
 </form>

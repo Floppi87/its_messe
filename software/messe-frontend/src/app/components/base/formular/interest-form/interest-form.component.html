@@ -1,4 +1,4 @@
-
+<its-loading *ngIf="products.length <= 0"></its-loading>
     <label *ngFor="let product of products">
         <input type="checkbox" value="{{product.id}}" name="{{product.id}}" (change)="onChange(product)">
         {{product.name}}
