@@ -15,6 +15,7 @@ namespace Messe_Backend.Controllers
             this.db= new CustomerDB();
         }
 
+        //Post Endpunkt "data" mit ein Kunde Regestiert werden kann
         [HttpPost("data")]
         public IActionResult Register(PersonData data)
         {
@@ -29,6 +30,7 @@ namespace Messe_Backend.Controllers
             
         }
 
+        //Get Endpunkt "products" um die verfügbaren Produkte abzurufen
         [HttpGet("products")]
         public IActionResult GetProducts()
         {
@@ -45,6 +47,7 @@ namespace Messe_Backend.Controllers
             
         }
 
+        //Get Endpunkt "customers" um die Regestrierten Kunden abzurufen.
         [HttpGet("customers")]
         public IActionResult GetCustomers()
         {
@@ -59,6 +62,7 @@ namespace Messe_Backend.Controllers
             }
         }
 
+        //Get Endpunkt um die offline und Online Datenbank zu Syncronisieren 
         [HttpGet("sync")]
         public IActionResult Sync()
         {

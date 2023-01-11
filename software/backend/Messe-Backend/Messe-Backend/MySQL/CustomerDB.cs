@@ -27,17 +27,22 @@ namespace Messe_Backend.MySQL
             this._dbIpAlt = "127.0.0.1";
         }
 
+        //Public Methode zum Regestrieren von Kunden
+        //Übergeben werden die Daten der Person in Form eines PersonData Objects und 
+        //ein bool der Angibt ob die online Ip oder die alternative offline IP genutzt
+        //werden soll
         public void RegisterCustomer(PersonData personData, bool useAlt = false)
         {
 
-
+            //Auswahl der online oder offline Datenbank
             Connection mysql;
             if (useAlt)
                 mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
             else
                 mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
 
-
+            //Falls keine Verbindung mit der online Datenbank hergestellt werden kann und wird die Methode
+            //erneut aufgerufen mit useAlt auf true um die offline Datenbank zu nutzen
             try
             {
                 if (checkEmail(mysql, personData.Email))
@@ -75,18 +80,25 @@ namespace Messe_Backend.MySQL
             }
         }
 
+        //Private Methode zum Regestrieren von Firmen
+        //Übergeben werden die Daten der Person in Form eines PersonData Objects und 
+        //ein bool der Angibt ob die online Ip oder die alternative offline IP genutzt
+        //werden soll
         private void RegisterCompany(PersonData personData, bool useAlt)
         {
+            //Auswahl der online oder offline Datenbank
             Connection mysql;
             if (useAlt)
                 mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
             else
                 mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
 
+            //Überprüfen ob die Firma bereits in der Datenbak hinterlegt ist
             string findCompanySql = "SELECT * FROM companies WHERE Name = @name";
             Dictionary<string, object> parameter = new Dictionary<string, object>();
             parameter.Add("@name", personData.Company.Name);
 
+            //Speichern der Firma in der Datenbank wenn noch nicht vorhanden
             using (MySqlDataReader reader = mysql.GetReader(findCompanySql, parameter))
             {
                 bool existing = reader.HasRows;
@@ -101,14 +113,20 @@ namespace Messe_Backend.MySQL
             }
         }
 
+        //Private Methode die einen eintag für jedes Produktinteresse der Kunden in der Datenbank speichert
+        //Übergeben werden die Daten der Person in Form eines PersonData Objects und 
+        //ein bool der Angibt ob die online Ip oder die alternative offline IP genutzt
+        //werden soll
         private void LinkCustomerToProduct(PersonData personData, bool useAlt)
         {
+            //Auswahl der online oder offline Datenbank
             Connection mysql;
             if (useAlt)
                 mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
             else
                 mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
 
+            //Abspeichern der einzelnen Interessen des Kunden in der Datenbank
             Dictionary<string, object> parameter = new Dictionary<string, object>();
             parameter.Add("@email", personData.Email);
             foreach (Product product in personData.Interests)
@@ -118,10 +136,13 @@ namespace Messe_Backend.MySQL
 
         }
 
+        //Public Metode um die eine Liste von allen Verfügbaren Produkten zurück gibt
+        //Übergeben wird ein bool der Angibt ob die online Ip oder die alternative
+        //offline IP genutzt werden soll
         public List<Product> GetProducts(bool useAlt = false)
         {
+            //Auswahl der online oder offline Datenbank
             Connection mysql;
-
             if (useAlt)
                 mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
             else
@@ -129,7 +150,8 @@ namespace Messe_Backend.MySQL
                 mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
             }
 
-
+            //Falls keine Verbindung mit der online Datenbank hergestellt werden kann und wird die Methode
+            //erneut aufgerufen mit useAlt auf true um die offline Datenbank zu nutzen
             string sql = "SELECT * FROM products";
             List<Product> products = new List<Product>();
             try
@@ -158,16 +180,20 @@ namespace Messe_Backend.MySQL
             }
         }
 
-
+        //public Metode um die eine Liste von allen regestrierten Kunden zurück gibt
+        //Übergeben wird ein bool der Angibt ob die online Ip oder die alternative
+        //offline IP genutzt werden soll
         public List<PersonData> GetPersonDatas(bool useAlt = false)
         {
+            //Auswahl der online oder offline Datenbank
             Connection mysql;
-
             if (useAlt)
                 mysql = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
             else
                 mysql = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
 
+            //Falls keine Verbindung mit der online Datenbank hergestellt werden kann und wird die Methode
+            //erneut aufgerufen mit useAlt auf true um die offline Datenbank zu nutzen
             string sql = "SELECT customers.ID, Surname, Firstname, Email, Phone, Street, Housenumber, City, Postcode, Picture, companies.ID, companies.Name FROM customers LEFT JOIN companies ON customers.Company = companies.ID";
 
             List<PersonData> personDatas = new List<PersonData>();
@@ -232,10 +258,11 @@ namespace Messe_Backend.MySQL
             }
         }
 
-
+        //public Metode um die offline Datenbank mit der online Datenbak zu Sycronisieren. Dabei werden die Einträge 
+        //in der offline Datenbank gelöscht
+        //Zurück gegeben wird ein bool der Angibt ob die Syncronisation erfolgreich war
         public bool SyncDatabases()
         {
-            Connection mysqlOnline = new Connection(_dbUser, _dbPassword, _dbIp, _dbName);
             Connection mysqlOffline = new Connection(_dbUser, _dbPassword, _dbIpAlt, _dbName);
             try
             {
@@ -256,20 +283,28 @@ namespace Messe_Backend.MySQL
             
             return true;
         }
-
+        
+        //public Methode zum encodieren eines Stings in einen base64Encoded String
         public static string Base64Encode(string plainText)
         {
             byte[] plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
             return System.Convert.ToBase64String(plainTextBytes);
         }
+
+        //public Methode zum decodieren eines base64Encoded String in einen String
         public static string Base64Decode(string base64EncodedData)
         {
             byte[] base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
+        //private Metode die Eine Liste aller Produkt Interessen eines Kunden zurück gibt
+        //Üvergeben wird die Id des Kunden und ein bool der Angibt ob die online Ip
+        //oder die alternative offline IP genutzt werden soll
         private List<Product> GetIntrests(int customerId, bool useAlt)
         {
+
+            //Auswahl der online oder offline Datenbank
             Connection mysql;
 
             if (useAlt)
@@ -294,6 +329,10 @@ namespace Messe_Backend.MySQL
             return products;
         }
 
+        //private Methode die überprüft ob eine E-Mail Adresse bereits regestriet wurde. Zurückgegeben wird
+        //ein bool der angibt ob die Email in der Datanbank existiert
+        //Übergeben wird ein Connection Object und die Email adresse
+
         private bool checkEmail(Connection connection,string mail)
         {
             string sqlMail = "SELECT * FROM customers WHERE customers.Email = @email";
@@ -309,6 +348,8 @@ namespace Messe_Backend.MySQL
             return true;
         }
 
+        //private Methode die einen Kunden aus der Datenbank löscht.
+        //Übergeben wird ein Connection Object und die Email adresse
         private void deleteUser(Connection connection, string mail)
         {
             if (checkEmail(connection, mail))
